@@ -22,7 +22,12 @@
             <button id="delete" onclick="del()">Delete</button>
         </div>
         <script>
-            // add JavaScript here
+            async function list() {
+                const endpoint = '/data-api/rest/Person';
+                const response = await fetch(endpoint);
+                const data = await response.json();
+                console.table(data.value);
+            }
         </script>
 </body>
 
