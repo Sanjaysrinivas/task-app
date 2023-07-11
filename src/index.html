@@ -27,6 +27,13 @@
                 const response = await fetch(endpoint);
                 const data = await response.json();
                 console.table(data.value);
+                async function get() {
+  const id = 1;
+  const endpoint = `/data-api/rest/Person/Id`;
+  const response = await fetch(`${endpoint}/${id}`);
+  const result = await response.json();
+  console.table(result.value);
+}
             }
         </script>
     </main>
