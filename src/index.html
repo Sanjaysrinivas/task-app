@@ -15,12 +15,9 @@
             Open the console in the browser developer tools to see the API responses.
         </blockquote>
         <div>
-            <label for="name">Name:</label>
-            <input type="text" id="name">
-            <label for="surname">Surname:</label>
-            <input type="text" id="surname">
-            <label for="message">Message:</label>
-            <input type="text" id="message">
+            <input type="text" id="name" placeholder="Name">
+            <input type="text" id="surname" placeholder="Surname">
+            <input type="text" id="message" placeholder="Message (Max 30 characters)">
             <button id="save" onclick="save()">Save</button>
         </div>
         <table id="table">
@@ -31,74 +28,77 @@
                     <th>Message</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="table-body">
             </tbody>
         </table>
         <script>
-            async function save() {
-                const nameInput = document.getElementById("name");
-                const surnameInput = document.getElementById("surname");
-                const messageInput = document.getElementById("message");
-                
-                const name = nameInput.value;
-                const surname = surnameInput.value;
-                const message = messageInput.value;
+            // JavaScript code for handling the save operation and displaying data in a table
 
-                // Create the data object to be sent to the API
-                const data = {
-                    name,
-                    surname,
-                    message
-                };
-
-                const endpoint = '/data-api/rest/Person';
-                const response = await fetch(endpoint, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(data)
+            // Function to retrieve and display data from the API
+            async function fetchData() {
+                const response = await fetch('/api', {
+                    method: 'GET',
                 });
+                const data = await response.json();
 
-                if (response.ok) {
-                    // Clear the input fields after successful save
-                    nameInput.value = "";
-                    surnameInput.value = "";
-                    messageInput.value = "";
-                    
-                    // Refresh the table to show the updated data
-                    await list();
-                } else {
-                    console.error("Failed to save the data.");
-                }
-            }
+                // Update the table with the retrieved data
+                const tableBody = document.getElementById('table-body');
+                tableBody.innerHTML = '';
 
-            async function list() {
-                const endpoint = '/data-api/rest/Person';
-                const response = await fetch(endpoint);
-                const result = await response.json();
-                
-                const tableBody = document.querySelector("#table tbody");
-                tableBody.innerHTML = "";
-
-                result.value.forEach(person => {
-                    const row = document.createElement("tr");
-                    const nameCell = document.createElement("td");
-                    const surnameCell = document.createElement("td");
-                    const messageCell = document.createElement("td");
-
-                    nameCell.textContent = person.name;
-                    surnameCell.textContent = person.surname;
-                    messageCell.textContent = person.message;
-
+                data.forEach((item) => {
+                    const row = document.createElement('tr');
+                    const nameCell = document.createElement('td');
+                    nameCell.textContent = item.Name;
+                    const surnameCell = document.createElement('td');
+                    surnameCell.textContent = item.Surname;
+                    const messageCell = document.createElement('td');
+                    messageCell.textContent = item.Message;
                     row.appendChild(nameCell);
                     row.appendChild(surnameCell);
                     row.appendChild(messageCell);
-
                     tableBody.appendChild(row);
                 });
             }
 
-            // Initial data population on page load
-            list();
+            // Function to handle the save operation
+            async function save() {
+                const name = document.getElementById('name').value;
+                const surname = document.getElementById('surname').value;
+                const message = document.getElementById('message').value;
+
+                if (name && surname && message) {
+                    const data = {
+                        Name: name,
+                        Surname: surname,
+                        Message: message
+                    };
+
+                    const response = await fetch('/api', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    if (response.ok) {
+                        // Data saved successfully, fetch and update the table
+                        fetchData();
+
+                        // Clear the input fields
+                        document.getElementById('name').value = '';
+                        document.getElementById('surname').value = '';
+                        document.getElementById('message').value = '';
+                    } else {
+                        console.error('Failed to save data.');
+                    }
+                } else {
+                    console.error('Please enter all the required fields.');
+                }
+            }
+
+            // Fetch and display data on page load
+            window.onload = fetchData;
         </script>
     </main>
 </body>
