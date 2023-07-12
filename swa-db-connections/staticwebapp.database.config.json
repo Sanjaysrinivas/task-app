@@ -30,7 +30,7 @@
   },
   "entities": {
     "Person": {
-      "source": "MyTestPersonTable",
+      "source": "person",
       "permissions": [
         {
           "actions": ["*"],

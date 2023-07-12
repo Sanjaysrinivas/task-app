@@ -15,28 +15,90 @@
             Open the console in the browser developer tools to see the API responses.
         </blockquote>
         <div>
-            <button id="list" onclick="list()">List</button>
-            <button id="get" onclick="get()">Get</button>
-            <button id="update" onclick="update()">Update</button>
-            <button id="create" onclick="create()">Create</button>
-            <button id="delete" onclick="del()">Delete</button>
+            <label for="name">Name:</label>
+            <input type="text" id="name">
+            <label for="surname">Surname:</label>
+            <input type="text" id="surname">
+            <label for="message">Message:</label>
+            <input type="text" id="message">
+            <button id="save" onclick="save()">Save</button>
         </div>
+        <table id="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Surname</th>
+                    <th>Message</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
         <script>
-        async function update() {
-            const id = 1;
-            const data = {
-                Name: "Molly"
-            };
-            const endpoint = '/data-api/rest/Person/Id';
-            const response = await fetch(`${endpoint}/${id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data)
-            });
-            const result = await response.json();
-            console.table(result.value);
-}
-            
+            async function save() {
+                const nameInput = document.getElementById("name");
+                const surnameInput = document.getElementById("surname");
+                const messageInput = document.getElementById("message");
+                
+                const name = nameInput.value;
+                const surname = surnameInput.value;
+                const message = messageInput.value;
+
+                // Create the data object to be sent to the API
+                const data = {
+                    name,
+                    surname,
+                    message
+                };
+
+                const endpoint = '/data-api/rest/Person';
+                const response = await fetch(endpoint, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    // Clear the input fields after successful save
+                    nameInput.value = "";
+                    surnameInput.value = "";
+                    messageInput.value = "";
+                    
+                    // Refresh the table to show the updated data
+                    await list();
+                } else {
+                    console.error("Failed to save the data.");
+                }
+            }
+
+            async function list() {
+                const endpoint = '/data-api/rest/Person';
+                const response = await fetch(endpoint);
+                const result = await response.json();
+                
+                const tableBody = document.querySelector("#table tbody");
+                tableBody.innerHTML = "";
+
+                result.value.forEach(person => {
+                    const row = document.createElement("tr");
+                    const nameCell = document.createElement("td");
+                    const surnameCell = document.createElement("td");
+                    const messageCell = document.createElement("td");
+
+                    nameCell.textContent = person.name;
+                    surnameCell.textContent = person.surname;
+                    messageCell.textContent = person.message;
+
+                    row.appendChild(nameCell);
+                    row.appendChild(surnameCell);
+                    row.appendChild(messageCell);
+
+                    tableBody.appendChild(row);
+                });
+            }
+
+            // Initial data population on page load
+            list();
         </script>
     </main>
 </body>
