@@ -56,3 +56,4 @@ module.exports = async function (context, req) {
 process.on('exit', () => {
   connection.end();
 });
+
