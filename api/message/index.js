@@ -3,9 +3,9 @@ const mysql = require('mysql');
 // Create a connection to the Azure MySQL database
 const connection = mysql.createConnection({
   host: 'first-server.mysql.database.azure.com',
-  user: 'taskadmin',
+  user: 'webadmin',
   password: 'Password123',
-  database: 'task',
+  database: 'deebee',
   port: 3306, // Replace with the appropriate port if necessary
   ssl: true // Enable SSL if required for your Azure MySQL database
 });

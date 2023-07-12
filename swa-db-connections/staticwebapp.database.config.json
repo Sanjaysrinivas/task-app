@@ -30,7 +30,7 @@
   },
   "entities": {
     "Person": {
-      "source": "person",
+      "source": "deebee.person",
       "permissions": [
         {
           "actions": ["create", "read", "update", "delete"],
