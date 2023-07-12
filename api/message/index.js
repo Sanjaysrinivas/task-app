@@ -26,7 +26,7 @@ module.exports = async function (context, req) {
 
     // Insert the data into the database
     connection.query(
-      'INSERT INTO person (Name, Surname, Message) VALUES (?, ?, ?)',
+        'INSERT INTO person (ID, Name, Surname, Message) VALUES (DEFAULT, ?, ?, ?)'
       [Name, Surname, Message],
       (error, results) => {
         if (error) {

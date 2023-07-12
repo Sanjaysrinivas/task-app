@@ -33,7 +33,7 @@
       "source": "person",
       "permissions": [
         {
-          "actions": ["*"],
+          "actions": ["create", "read", "update", "delete"],
           "role": "anonymous"
         }
       ]
