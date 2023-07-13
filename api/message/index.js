@@ -6,7 +6,7 @@ const connection = mysql.createConnection({
   user: 'webadmin',
   password: 'Password123',
   database: 'debee',
-  port: 3306, // Replace with the appropriate port if necessary
+  port: 4280, // Replace with the appropriate port if necessary
   ssl: true // Enable SSL if required for your Azure MySQL database
 });
 
